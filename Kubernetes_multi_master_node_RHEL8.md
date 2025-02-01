@@ -95,7 +95,7 @@ dnf install -y haproxy keepalived
 
 ### Configure HAProxy
 
-Add the following configuration to file `/etc/haproxy/haproxy.cfg`, keeping in mind that our virtual IP address is `192.168.30.200`
+Add the following configuration to file `/etc/haproxy/haproxy.cfg`, keeping in mind that our virtual IP address is `192.168.99.200`
 
 Run on both node `haproxy01/02`
 

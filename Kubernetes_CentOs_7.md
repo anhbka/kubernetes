@@ -209,15 +209,21 @@ EOF
 ### Step 6: Install Modules update your machines and then install all Kubernetes modules.
 
 
-`yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes`
+```
+yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+```
 
 ### Step 7: Enable kubelet
 
 Enable the Kubelet service on all machines.
 
-`systemctl enable kubelet --now`
+```
+systemctl enable kubelet --now
 
-`crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock` `#Fix warning crictl`
+#Fix warning crictl
+
+crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock 
+```
 
 *Don’t worry about any kubelet errors at this point. Once the worker nodes are successfully joined to the Kubernetes cluster using the provided join command, the kubelet service on each worker node will automatically activate and start communicating with the control plane. The kubelet is responsible for managing the containers on the node and ensuring that they run according to the specifications provided by the Kubernetes control plane.*
 
@@ -229,12 +235,13 @@ Great! Let’s proceed with initializing the Kubernetes control plane on the mas
 
 ```
 kubeadm config images pull
-
 ```
 
 After executing this command, Kubernetes will pull the necessary container images from the default container registry (usually Docker Hub) and store them locally on the machine. This step is typically performed before initializing the Kubernetes cluster to ensure that all required images are available locally and can be used without relying on an external registry during cluster setup.
 
-`kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.99.101`
+```
+kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=192.168.99.101
+```
 
 ```
 Your Kubernetes control-plane has initialized successfully!
@@ -347,15 +354,14 @@ master   Ready    control-plane   15m   v1.30.6   192.168.30.136   <none>       
 kubectl get pods -n kube-system -o wide
 NAME                                       READY   STATUS    RESTARTS   AGE     IP               NODE     NOMINATED NODE   READINESS GATES
 calico-kube-controllers-8558877b58-w6cw2   1/1     Running   0          4m26s   10.244.219.67    master   <none>           <none>
-calico-node-fcc4d                          1/1     Running   0          4m26s   192.168.30.136   master   <none>           <none>
+calico-node-fcc4d                          1/1     Running   0          4m26s   192.168.99.101   master   <none>           <none>
 coredns-55cb58b774-d2jgj                   1/1     Running   0          17m     10.244.219.66    master   <none>           <none>
 coredns-55cb58b774-nkffq                   1/1     Running   0          17m     10.244.219.65    master   <none>           <none>
-etcd-master                                1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-kube-apiserver-master                      1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-kube-controller-manager-master             1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-kube-proxy-xps5v                           1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-kube-scheduler-master                      1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-
+etcd-master                                1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
+kube-apiserver-master                      1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
+kube-controller-manager-master             1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
+kube-proxy-xps5v                           1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
+kube-scheduler-master                      1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
 ```
 
 ### 3. Initializing Kubernetes worker node
@@ -393,6 +399,7 @@ To test your Kubernetes cluster, you can deploy a simple application such as a N
 ```
 vim nginx-deployment.yaml
 ```
+
 ```
 apiVersion: apps/v1
 kind: Deployment
@@ -424,9 +431,11 @@ kubectl get deployments
 NAME               READY   UP-TO-DATE   AVAILABLE   AGE
 nginx-deployment   3/3     3            3           14m
 ```
+
 ```
 k get pod
 ```
+
 ```
 NAME                               READY   STATUS    RESTARTS   AGE
 nginx-deployment-576c6b7b6-28x9d   1/1     Running   0          14m
@@ -439,6 +448,7 @@ Expose NGINX to the external network:
 ```
 vim nginx-service.yaml
 ```
+
 ```
 apiVersion: v1
 kind: Service
@@ -459,7 +469,6 @@ kubectl get service nginx-service
 ```
 NAME            TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 nginx-service   LoadBalancer   10.97.191.219   <pending>     80:30568/TCP   6s
-  
 ```
 
 That’s it! Our 1-master-2-worker Kubernetes cluster is ready!
