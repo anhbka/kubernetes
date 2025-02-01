@@ -97,7 +97,7 @@ modprobe br_netfilter
 For the permanent loading, create a file (k8s.conf) with following content.
 
 ```
-sudo tee /etc/modules-load.d/k8s.conf <<EOF
+tee /etc/modules-load.d/k8s.conf <<EOF
 overlay
 br_netfilter
 EOF
@@ -128,7 +128,9 @@ curl -Lo /etc/yum.repos.d/docker-ce.repo https://raw.githubusercontent.com/anhbk
 ``` 
 Install the containerd package:
 
-`dnf install -y containerd.io `
+```
+dnf install -y containerd.io 
+```
 
 Post installation start & enable containerd service.
 
@@ -166,9 +168,14 @@ dnf install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
 Enable the Kubelet service on all machines.
 
-`systemctl enable kubelet --now`
+```
+systemctl enable kubelet --now
 
-`crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock` #Fix warning crictl
+#Fix warning crictl
+
+crictl config --set runtime-endpoint=unix:///run/containerd/containerd.sock
+
+```
 
 *Don’t worry about any kubelet errors at this point. Once the worker nodes are successfully joined to the Kubernetes cluster using the provided join command, the kubelet service on each worker node will automatically activate and start communicating with the control plane. The kubelet is responsible for managing the containers on the node and ensuring that they run according to the specifications provided by the Kubernetes control plane.*
 
@@ -298,14 +305,14 @@ kubectl get pods -n kube-system -o wide
 ```
 NAME                                       READY   STATUS    RESTARTS   AGE     IP               NODE     NOMINATED NODE   READINESS GATES
 calico-kube-controllers-8558877b58-w6cw2   1/1     Running   0          4m26s   10.244.219.67    master   <none>           <none>
-calico-node-fcc4d                          1/1     Running   0          4m26s   192.168.30.136   master   <none>           <none>
+calico-node-fcc4d                          1/1     Running   0          4m26s   192.168.99.101   master   <none>           <none>
 coredns-55cb58b774-d2jgj                   1/1     Running   0          17m     10.244.219.66    master   <none>           <none>
 coredns-55cb58b774-nkffq                   1/1     Running   0          17m     10.244.219.65    master   <none>           <none>
-etcd-master                                1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-kube-apiserver-master                      1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-kube-controller-manager-master             1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-kube-proxy-xps5v                           1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
-kube-scheduler-master                      1/1     Running   0          17m     192.168.30.136   master   <none>           <none>
+etcd-master                                1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
+kube-apiserver-master                      1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
+kube-controller-manager-master             1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
+kube-proxy-xps5v                           1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
+kube-scheduler-master                      1/1     Running   0          17m     192.168.99.101   master   <none>           <none>
 
 ```
 
@@ -403,6 +410,8 @@ spec:
       port: 80
       targetPort: 80
   type: LoadBalancer
+
+kubectl apply -f nginx-service.yaml
 ```
 ```  
 kubectl get service nginx-service

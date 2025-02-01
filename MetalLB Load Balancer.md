@@ -6,14 +6,10 @@ MetalLB is a Kubernetes service implementation for LoadBalancer-type services. W
 
 If you’re using kube-proxy in IPVS mode, since Kubernetes v1.14.2 you have to enable strict ARP mode. You can achieve this by editing kube-proxy config in current cluster and Set ARP mode true. Find out this KubeProxyConfiguratuon block and change only `strictARP: true`
 
-`kubectl edit configmap -n kube-system kube-proxy`
-
 ```
-apiVersion: kubeproxy.config.k8s.io/v1alpha1
-kind: KubeProxyConfiguration
-mode: "ipvs"
-ipvs:
-  strictARP: true
+kubectl get configmap kube-proxy -n kube-system -o yaml | \
+sed -e "s/strictARP: false/strictARP: true/" | \
+kubectl apply -f - -n kube-system
 ```
 
 ### Steps 2: Install MetalLB CRD & Controller using the official manifests by MetalLB
