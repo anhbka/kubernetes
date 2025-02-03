@@ -514,7 +514,6 @@ NAME            TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 nginx-service   NodePort   10.110.93.221   <none>        80:31738/TCP   85s
 ```
 
-That’s it! Our 1-master-2-worker Kubernetes cluster is ready!
-To add more nodes, simply repeat this step on other machines.
+Congratulations, You have successfully configured HA Kubernetes Cluster. 
 
 ![haproxy](https://github.com/user-attachments/assets/250fcfc1-bcb3-4d80-9427-b47747001860)
