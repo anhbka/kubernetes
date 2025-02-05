@@ -84,8 +84,8 @@ EOF
 
 ```
 systemctl daemon-reload
-systemctl start etcd
 systemctl enable etcd 
+systemctl start etcd
 systemctl status etcd
 ```
 ```
