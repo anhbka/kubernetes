@@ -14,7 +14,9 @@ kubectl apply -f - -n kube-system
 
 ### Steps 2: Install MetalLB CRD & Controller using the official manifests by MetalLB
 
-`kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.12/config/manifests/metallb-native.yaml`
+```
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.12/config/manifests/metallb-native.yaml
+```
 
 ### Steps 3: Layer 2 Configuration for to advertise the IP Pool
 
@@ -40,7 +42,9 @@ spec:
   - 192.168.99.240-192.168.99.250 # Change to your IP pool ex: 192.168.56.200-192.168.56.250
 ```
 
-`kubectl apply -f metallb-ipadd-pool.yaml`
+```
+kubectl apply -f metallb-ipadd-pool.yaml
+```
 
 ### Steps 4: Advertise the IP Address Pool
 
@@ -58,11 +62,14 @@ spec:
   - first-pool
 ```
 
-`kubectl apply -f metallb-pool-advertise.yaml`
+```
+kubectl apply -f metallb-pool-advertise.yaml
+```
 
 ```
 kubectl get pod -n metallb-system
-
+```
+```
 NAME                          READY   STATUS    RESTARTS   AGE
 controller-547c7bdf5c-rb9t8   1/1     Running   0          3m33s
 speaker-92r6z                 1/1     Running   0          3m33s
@@ -74,9 +81,9 @@ speaker-h8tr2                 1/1     Running   0          3m33s
 ```
 kubectl create deployment nginx-web-server --image=nginx
 kubectl expose deployment nginx-web-server --port=80 --target-port=80 --type=LoadBalancer
-```
-```
 kubectl get svc
+```
+```
 NAME               TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
 kubernetes         ClusterIP      10.96.0.1       <none>           443/TCP        24h
 nginx-web-server   LoadBalancer   10.104.166.72   192.168.99.240   80:31254/TCP   8s
