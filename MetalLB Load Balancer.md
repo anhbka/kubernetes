@@ -39,7 +39,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-  - 192.168.99.240-192.168.99.250 # Change to your IP pool ex: 192.168.56.200-192.168.56.250
+  - 192.168.30.240-192.168.30.250 # Change to your IP pool ex: 192.168.56.200-192.168.56.250
 ```
 
 ```
@@ -86,8 +86,8 @@ kubectl get svc
 ```
 NAME               TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)        AGE
 kubernetes         ClusterIP      10.96.0.1       <none>           443/TCP        24h
-nginx-web-server   LoadBalancer   10.104.166.72   192.168.99.240   80:31254/TCP   8s
-[root@master ~]# curl 192.168.99.240
+nginx-web-server   LoadBalancer   10.104.166.72   192.168.30.240   80:31254/TCP   8s
+[root@master ~]# curl 192.168.30.240
 <!DOCTYPE html>
 <html>
 <head>
@@ -112,4 +112,4 @@ Commercial support is available at
 </body>
 </html>
 ```
-It looks like you’ve successfully created and exposed the nginx-web-server deployment as a LoadBalancer service. `External IP: 192.168.99.240`
+It looks like you’ve successfully created and exposed the nginx-web-server deployment as a LoadBalancer service. `External IP: 192.168.30.240`
